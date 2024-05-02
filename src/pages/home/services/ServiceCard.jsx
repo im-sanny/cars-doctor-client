@@ -1,5 +1,8 @@
-const ServiceCard = ({service}) => {
-    const {title, img, price} = service;
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
+
+const ServiceCard = ({ service }) => {
+  const { _id, title, img, price } = service;
   return (
     <div>
       <div className="card bg-base-100 shadow-xl">
@@ -14,7 +17,9 @@ const ServiceCard = ({service}) => {
           <h2 className="card-title">{title}</h2>
           <p className="text-orange-500">Price: ${price}</p>
           <div className="flex justify-end">
-            <button className="btn  bg-orange-600">B</button>
+            <Link className="text-orange-500" to={`/services/${_id}`}>
+              <FaArrowRight></FaArrowRight>
+            </Link>
           </div>
         </div>
       </div>
