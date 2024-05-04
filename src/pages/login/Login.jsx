@@ -1,21 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../../assets/assets/login/login.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
+import { data } from "autoprefixer";
+import axios from "axios";
 const Login = () => {
-  const {signIn} = useContext(AuthContext)
-    const handleLogin = event =>{
-        event.preventDefault();
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
-        signIn(email, password)
-        .then(result => {
-          const user = result.user;
-          console.log(user);
-        })
-        .catch((error) => console.log(error))
-    }
+  const { signIn } = useContext(AuthContext);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signIn(email, password)
+      .then((result) => {
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+        const user = {email}
+
+        //get access token
+        axios.post("http://localhost:5000/jwt", user, {withCredentials:true})
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.success) {
+              navigate(location?.state ? location?.state : "/");
+            }
+          });
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">
@@ -62,7 +79,12 @@ const Login = () => {
                   className="btn btn-primary"
                 />
               </div>
-            <p className="text-center my-2">New to Car Doctor? <Link to={"/signUp"} className="text-orange-500 font-bold">Sign Up</Link></p>
+              <p className="text-center my-2">
+                New to Car Doctor?{" "}
+                <Link to={"/signUp"} className="text-orange-500 font-bold">
+                  Sign Up
+                </Link>
+              </p>
             </form>
           </div>
         </div>
