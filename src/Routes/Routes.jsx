@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../layout/Main";
-import Home from "../pages/home/Home";
-import Login from "../pages/login/Login";
-import SignUp from "../pages/signup/SignUp";
-import BookService from "../pages/bookService/BookService";
-import Bookings from "../pages/bookings/Bookings";
-import ProtectedRoute from "./ProtectedRoute";
+import Main from "../Layout/Main";
+import Home from "../pages/Home/Home/Home";
+import Login from "../pages/Login/Login";
+import SignUp from "../pages/SignUp/SignUp";
+import BookService from "../pages/BookService/BookService";
+import Bookings from "../pages/Bookings/Bookings";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -17,29 +17,25 @@ const router = createBrowserRouter([
         element: <Home></Home>,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login></Login>,
       },
       {
-        path: "/signUp",
+        path: "signup",
         element: <SignUp></SignUp>,
       },
       {
-        path: "/services/:id",
-        element: (
-          <ProtectedRoute>
-            <BookService></BookService>
-          </ProtectedRoute>
-        ),
+        path: "book/:id",
+        element: <BookService></BookService>,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/services/${params?.id}`),
+          fetch(`http://localhost:5000/services/${params.id}`),
       },
       {
-        path: "/bookings",
+        path: "bookings",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <Bookings></Bookings>
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
     ],
